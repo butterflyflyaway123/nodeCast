@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+
+<body>
+  {{include '../_partials/header.html'}}
+  <section class="container">
+  <div class="row">
+    <div class="col-md-5">
+        {{ if !user }}
+        <div class="alert alert-danger" role="alert">对不起，请先登录</div>
+        {{ else if !topic }}
+        <div class="alert alert-danger" role="alert">不存在该话题哦..</div>
+        {{ else if topic.userId!==user.id}}
+        <div class="alert alert-danger" role="alert">只有话题主人才有编辑权限哦..</div>
+        {{ else }}
+        <form id="topic_edit_form">
+                <div class="form-group">
+                  <label for="categoryId">选择板块</label>
+                  <select class="form-control" name="categoryId" id="categoryId">
+                      {{ each categories}}
+                      {{ if topic.categoryId===$value.id }}
+                   <option value="{{$value.id}}" selected>{{ $value.name }}</option>
+                   {{ else }}
+                   <option value="{{$value.id}}">{{ $value.name }}</option>
+                   {{ /if }}
+                   {{ /each }}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="title">标题</label>
+                  <input type="text" class="form-control" id="title" name="title" value="{{topic.title}}">
+                </div>
+                <div class="form-group">
+                  <label for="content">内容</label>
+                  <textarea class="form-control" id="content" name="content" rows="3">{{topic.content}}</textarea>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+        {{ /if }}
+     
+    </div>
+  </div>
+</section>
+  {{include '../_partials/footer.html'}}
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script>
+      $('#topic_edit_form').on('submit',function(e){
+        e.preventDefault();
+      $.post('/topic/new', $(this).serialize(), function (data) {
+        switch(data.code) {
+          case 0:
+          console.log(data);
+         window.alert('恭喜，编辑成功');
+            window.location.href = '/topic/' + data.topicId;
+            break;
+          case 500:
+            window.alert('编辑失败，请稍后重试');
+            break;
+          default:
+            break;
+        }
+      })
+      });
+  </script>
+</body>
+
+</html>

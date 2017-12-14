@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="/public/css/login.css">
+</head>
+
+<body>
+  <div class="main">
+    <div class="header">
+      <a href="/">
+        <img src="/public/img/logo3.png" alt="">
+      </a>
+      <h1>用户登录</h1>
+    </div>
+    <form id="form_login">
+      <div class="form-group">
+        <label for="email">邮箱</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="Email" autofocus required>
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">密码</label>
+        <a class="pull-right" href="">忘记密码？</a>
+        <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Password">
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox">记住我
+        </label>
+      </div>
+      <button type="submit" class="btn btn-success btn-block">登录</button>
+    </form>
+    <div class="message">
+      <p>没有账号?
+        <a href="/register">点击创建</a>.</p>
+    </div>
+  </div>
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script>
+    $('#form_login').on('submit', function (e) {
+      e.preventDefault();
+      $.post('/login', $(this).serialize(), function (data) {
+        console.log(data);
+        switch (data.code) {
+          case 0:
+            window.location.href = '/';
+            break;
+          case 400:
+          case 404:
+            window.alert('登陆失败');
+            break;
+          default:
+            window.alert('登录异常');
+            break;
+        }
+      });
+    })
+
+  </script>
+
+</body>
+
+</html>

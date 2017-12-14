@@ -1,0 +1,143 @@
+{{extend '../_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'head'}}
+<link rel="stylesheet" href="/public/css/markdown-github.css">
+<style>
+  .panel .panel-heading .action i {
+    margin-right: 10px;
+  }
+</style>
+{{/block}}
+
+{{block 'body'}}
+<section class="container">
+  <div class="row">
+    <div class="col-md-9">
+      {{ if !topic }}
+      <div class="alert alert-danger" role="alert">此话题不存在或已被删除</div>
+      {{ else }}
+      <div class="topic-title">
+        <h1>{{ topic.title}}</h1>
+        <p>发布与16分钟前 作者XX 4次浏览 来自客户端测试</p>
+     <!-- 权限操作符号的显示，如果当前文章的作者和当前 登录 用户的id相等，就显示操作符 -->
+        {{ if( (user && topic.userId=== user.id))}}
+        <P class="action">
+          <!-- 动态路径 -->
+            <a href="/topic/{{topic.id}}/edit">   
+              <span class="glyphicon glyphicon-edit"></span>
+            </a>
+            &nbsp;&nbsp;
+            <!-- 删除按钮 -->
+            <a id="remove" href="/topic/{{topic.id}}/delete">
+              <span class="glyphicon glyphicon-remove-circle"></span>
+            </a>
+          </P>
+        {{ /if}}
+        <hr>
+    </div>
+    <!-- 话题内容 -->
+    <div class="topic-content">
+        <!-- 
+          如果输出的内容是 html 则会转义输出（转成字符串）
+          如果需要输出 html 则使用下面的语句输出
+         -->
+        <article class="markdown-body">{{@topic.content}}</article>
+      </div>
+      <!--话题评论内容 -->
+      <div class="panel panel-default">
+          <div class="panel-heading">
+            <span>lipengzhou</span> commented 
+            <span>24 minutes ago</span>
+            <span class="action">
+              <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+            </span>
+          </div>
+          <div class="panel-body">
+            评论测试
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span>lipengzhou</span> commented 
+            <span>24 minutes ago</span>
+            <span class="action">
+              <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+            </span>
+          </div>
+          <div class="panel-body">
+            评论测试
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span>lipengzhou</span> commented 
+            <span>24 minutes ago</span>
+            <span class="action">
+              <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+            </span>
+          </div>
+          <div class="panel-body">
+            评论测试
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span>lipengzhou</span> commented 
+            <span>24 minutes ago</span>
+            <span class="action">
+              <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+            </span>
+          </div>
+          <div class="panel-body">
+            评论测试
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <span>lipengzhou</span> commented 
+            <span>24 minutes ago</span>
+            <span class="action">
+              <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+              <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
+            </span>
+          </div>
+          <div class="panel-body">
+            评论测试
+          </div>
+        </div>
+        <hr>
+        <form>
+    {{ /if }}
+     
+        <div class="form-group">
+          <label for="exampleInputPassword1">添加回复</label>
+          <textarea class="form-control" name="" id="" cols="10" rows="10"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">回复</button>
+      </form>
+    </div>
+  </div>
+</section>
+<script src="/node_modules/jquery/dist/jquery.js"></script>
+<script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+<script>
+  $('#remove').on('click',handleRemove);
+  function handleRemove(){
+    if(!window.confirm('确定要删除吗')){
+      return false;
+    }
+  }
+</script>
+
+{{/block}}

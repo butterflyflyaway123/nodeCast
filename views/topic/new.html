@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+</head>
+
+<body>
+  {{include '../_partials/header.html'}}
+  <section class="container">
+  <div class="row">
+    <div class="col-md-5">
+      <form id="topic_new_form">
+        <div class="form-group">
+          <label for="categoryId">选择板块</label>
+          <select class="form-control" name="categoryId" id="categoryId">
+            {{ each topicCategories }}
+            <option value="{{ $value.id }}">{{ $value.name }}</option>
+            {{ /each }}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="title">标题</label>
+          <input type="text" class="form-control" id="title" name="title">
+        </div>
+        <div class="form-group">
+          <label for="content">内容</label>
+          <textarea class="form-control" id="content" name="content" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+  </div>
+</section>
+  {{include '../_partials/footer.html'}}
+  <script src="/node_modules/jquery/dist/jquery.js"></script>
+  <script>
+    $('#topic_new_form').on('submit', handleTopicNewSubmit);
+
+    function handleTopicNewSubmit(e) {
+      e.preventDefault();
+      $.post('/topic/new', $(this).serialize(), function (data) {
+        switch(data.code) {
+          case 0:
+          console.log(data);
+         window.alert('恭喜，发布成功');
+            window.location.href = '/topic/' + data.topicId;
+            break;
+          case 500:
+            window.alert('发布失败，请稍后重试');
+            break;
+          default:
+            break;
+        }
+      })
+    }
+  </script>
+</body>
+
+</html>
